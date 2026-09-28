@@ -6,7 +6,7 @@ import type { JointName } from '../../types/character'
 import { useCharacterStore } from '../../store/useCharacterStore'
 import JointHandle from './JointHandle'
 import IKDragHandle from './IKDragHandle'
-import BodyMaterial from './BodyMaterial'
+import BodyPartMesh from './BodyPartMesh'
 import FaceLayer from '../Face/FaceLayer'
 import { registerJointObject } from '../../skeleton/jointObjectRegistry'
 import { LIMB_CONFIGS } from '../../ik/limbConfig'
@@ -47,17 +47,9 @@ function JointNode({ jointName, onSelectJoint }: JointNodeProps) {
   return (
     <group ref={setGroupRef} position={position} quaternion={quat}>
       {geom.meshType === 'capsule' && (
-        <mesh position={[0, meshCenterY, 0]} castShadow receiveShadow>
-          <capsuleGeometry args={[geom.radius, capsuleLen, 4, 10]} />
-          <BodyMaterial />
-        </mesh>
+        <BodyPartMesh type="capsule" args={[geom.radius, capsuleLen, 4, 10]} position={[0, meshCenterY, 0]} />
       )}
-      {geom.meshType === 'sphere' && (
-        <mesh castShadow receiveShadow>
-          <sphereGeometry args={[geom.radius, 20, 16]} />
-          <BodyMaterial />
-        </mesh>
-      )}
+      {geom.meshType === 'sphere' && <BodyPartMesh type="sphere" args={[geom.radius, 20, 16]} />}
 
       {jointName === 'head' && <FaceLayer headRadius={geom.radius} />}
 
