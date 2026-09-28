@@ -13,6 +13,7 @@ import {
 } from '../types/character'
 import { computeHeadRatioMultipliers } from '../skeleton/jointDefs'
 import { defaultExpression } from '../expression/expressionPresets'
+import { CENTER_JOINTS, LR_JOINT_PAIRS, mirrorQuat } from '../skeleton/mirror'
 
 export type InteractionMode = 'fk' | 'ik'
 
@@ -60,6 +61,7 @@ interface CharacterState {
   past: HistoryEntry[]
   future: HistoryEntry[]
   isInteracting: boolean
+  pelvisGizmoMode: 'translate' | 'rotate'
 
   setProportion: (key: keyof BodyProportions, value: number) => void
   applyHeadRatioPreset: (preset: HeadRatioPreset) => void
@@ -82,6 +84,9 @@ interface CharacterState {
   addSavedPose: (pose: SavedPose) => void
   removeSavedPose: (id: string) => void
   setIsInteracting: (value: boolean) => void
+  setPelvisGizmoMode: (mode: 'translate' | 'rotate') => void
+  mirrorLeftToRight: () => void
+  flipPoseLeftRight: () => void
 }
 
 function clonePose(pose: PoseData): PoseData {
@@ -115,6 +120,7 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   past: [],
   future: [],
   isInteracting: false,
+  pelvisGizmoMode: 'translate',
 
   setProportion: (key, value) =>
     set((state) => ({
@@ -203,6 +209,45 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
   addSavedPose: (savedPose) => set((state) => ({ savedPoses: [...state.savedPoses, savedPose] })),
   removeSavedPose: (id) => set((state) => ({ savedPoses: state.savedPoses.filter((p) => p.id !== id) })),
   setIsInteracting: (value) => set({ isInteracting: value }),
+  setPelvisGizmoMode: (mode) => set({ pelvisGizmoMode: mode }),
+
+  mirrorLeftToRight: () => {
+    const state = get()
+    const prev = clonePose(state.pose)
+    const rotations = { ...state.pose.rotations }
+    for (const [l, r] of LR_JOINT_PAIRS) {
+      rotations[r] = mirrorQuat(rotations[l])
+    }
+    set({
+      pose: { ...state.pose, rotations },
+      past: [...state.past, { pose: prev }].slice(-50),
+      future: [],
+    })
+  },
+
+  flipPoseLeftRight: () => {
+    const state = get()
+    const prev = clonePose(state.pose)
+    const rotations = { ...state.pose.rotations }
+    for (const [l, r] of LR_JOINT_PAIRS) {
+      const oldL = state.pose.rotations[l]
+      const oldR = state.pose.rotations[r]
+      rotations[l] = mirrorQuat(oldR)
+      rotations[r] = mirrorQuat(oldL)
+    }
+    for (const c of CENTER_JOINTS) {
+      rotations[c] = mirrorQuat(state.pose.rotations[c])
+    }
+    const pelvisRotation = mirrorQuat(state.pose.pelvisTransform.rotation)
+    set({
+      pose: {
+        rotations,
+        pelvisTransform: { position: state.pose.pelvisTransform.position, rotation: pelvisRotation },
+      },
+      past: [...state.past, { pose: prev }].slice(-50),
+      future: [],
+    })
+  },
 }))
 
 export function allJointNames(): JointName[] {

@@ -3,6 +3,7 @@ import BodyShapePanel from './components/Panels/BodyShapePanel'
 import CameraViewToolbar from './components/Panels/CameraViewToolbar'
 import PoseControlToolbar from './components/Panels/PoseControlToolbar'
 import RightPanelPlaceholder from './components/Panels/RightPanelPlaceholder'
+import HeadRotationPanel from './components/Panels/HeadRotationPanel'
 import CanvasStage from './components/Scene/CanvasStage'
 import { useCharacterStore } from './store/useCharacterStore'
 
@@ -44,7 +45,8 @@ function App() {
           </div>
         </main>
 
-        <aside className="min-h-0 overflow-y-auto">
+        <aside className="min-h-0 overflow-y-auto flex flex-col gap-3">
+          <HeadRotationPanel />
           <RightPanelPlaceholder />
         </aside>
       </div>
