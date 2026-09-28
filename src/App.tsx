@@ -1,9 +1,25 @@
+import { useEffect } from 'react'
 import BodyShapePanel from './components/Panels/BodyShapePanel'
 import CameraViewToolbar from './components/Panels/CameraViewToolbar'
+import PoseControlToolbar from './components/Panels/PoseControlToolbar'
 import RightPanelPlaceholder from './components/Panels/RightPanelPlaceholder'
 import CanvasStage from './components/Scene/CanvasStage'
+import { useCharacterStore } from './store/useCharacterStore'
 
 function App() {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (!(e.ctrlKey || e.metaKey)) return
+      if (e.key.toLowerCase() !== 'z') return
+      e.preventDefault()
+      const { undo, redo } = useCharacterStore.getState()
+      if (e.shiftKey) redo()
+      else undo()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
   return (
     <div className="h-full w-full flex flex-col p-3 gap-3">
       <header className="flex items-center gap-2 px-1">
@@ -20,6 +36,7 @@ function App() {
 
         <main className="min-h-0 flex flex-col gap-3">
           <CameraViewToolbar />
+          <PoseControlToolbar />
           <div className="flex-1 min-h-0 panel-card !p-1 overflow-hidden">
             <div className="w-full h-full rounded-2xl overflow-hidden">
               <CanvasStage />

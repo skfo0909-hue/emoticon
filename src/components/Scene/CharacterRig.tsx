@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Quaternion } from 'three'
+import { Quaternion, type Group } from 'three'
 import type { ThreeEvent } from '@react-three/fiber'
 import { CHILDREN_MAP, JOINT_DEFS, computeJointGeometry, resolveMeasurements } from '../../skeleton/jointDefs'
 import type { JointName } from '../../types/character'
@@ -7,6 +7,7 @@ import { useCharacterStore } from '../../store/useCharacterStore'
 import JointHandle from './JointHandle'
 import BodyMaterial from './BodyMaterial'
 import FaceLayer from '../Face/FaceLayer'
+import { registerJointObject } from '../../skeleton/jointObjectRegistry'
 
 interface JointNodeProps {
   jointName: JointName
@@ -29,8 +30,10 @@ function JointNode({ jointName, onSelectJoint }: JointNodeProps) {
   const capsuleLen = Math.max(0.001, geom.boneLength - geom.radius * 2)
   const meshCenterY = geom.boneAxis === 'up' ? geom.boneLength / 2 : -geom.boneLength / 2
 
+  const setGroupRef = (obj: Group | null) => registerJointObject(jointName, obj)
+
   return (
-    <group position={geom.offset} quaternion={quat}>
+    <group ref={setGroupRef} position={geom.offset} quaternion={quat}>
       {geom.meshType === 'capsule' && (
         <mesh position={[0, meshCenterY, 0]} castShadow receiveShadow>
           <capsuleGeometry args={[geom.radius, capsuleLen, 4, 10]} />

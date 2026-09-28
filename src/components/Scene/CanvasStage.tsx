@@ -4,6 +4,7 @@ import CameraRig from './CameraRig'
 import SceneLighting from './SceneLighting'
 import Floor from './Floor'
 import CharacterRig from './CharacterRig'
+import JointGizmo from './JointGizmo'
 import { useCharacterStore } from '../../store/useCharacterStore'
 
 export default function CanvasStage() {
@@ -21,6 +22,7 @@ export default function CanvasStage() {
         <SceneLighting />
         <Floor />
         <CharacterRig />
+        <JointGizmo />
         <CameraRig />
       </Suspense>
     </Canvas>

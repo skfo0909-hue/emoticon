@@ -45,13 +45,13 @@ export const JOINT_DEFS: Record<JointName, JointDef> = {
   neck: { name: 'neck', parent: 'torso', limit: lim([-30 * D2R, 30 * D2R], [-60 * D2R, 60 * D2R], [-25 * D2R, 25 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
   head: { name: 'head', parent: 'neck', limit: lim([-45 * D2R, 40 * D2R], [-85 * D2R, 85 * D2R], [-35 * D2R, 35 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
 
-  shoulderL: { name: 'shoulderL', parent: 'torso', limit: lim([-20 * D2R, 20 * D2R], [-20 * D2R, 20 * D2R], [-25 * D2R, 25 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
+  shoulderL: { name: 'shoulderL', parent: 'torso', limit: lim([-20 * D2R, 20 * D2R], [-20 * D2R, 20 * D2R], [-25 * D2R, 25 * D2R]), isHandle: false, handleColor: 0x2e7d32 },
   upperArmL: { name: 'upperArmL', parent: 'shoulderL', limit: lim([-170 * D2R, 90 * D2R], [-90 * D2R, 90 * D2R], [-100 * D2R, 100 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
   elbowL: { name: 'elbowL', parent: 'upperArmL', limit: lim([0, 150 * D2R], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
   lowerArmL: { name: 'lowerArmL', parent: 'elbowL', limit: lim([0, 0], [-80 * D2R, 80 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
   handL: { name: 'handL', parent: 'lowerArmL', limit: lim([-60 * D2R, 60 * D2R], [-30 * D2R, 30 * D2R], [-40 * D2R, 40 * D2R]), isHandle: true, handleColor: 0xff8a3d },
 
-  shoulderR: { name: 'shoulderR', parent: 'torso', limit: lim([-20 * D2R, 20 * D2R], [-20 * D2R, 20 * D2R], [-25 * D2R, 25 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
+  shoulderR: { name: 'shoulderR', parent: 'torso', limit: lim([-20 * D2R, 20 * D2R], [-20 * D2R, 20 * D2R], [-25 * D2R, 25 * D2R]), isHandle: false, handleColor: 0x2e7d32 },
   upperArmR: { name: 'upperArmR', parent: 'shoulderR', limit: lim([-170 * D2R, 90 * D2R], [-90 * D2R, 90 * D2R], [-100 * D2R, 100 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
   elbowR: { name: 'elbowR', parent: 'upperArmR', limit: lim([0, 150 * D2R], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
   lowerArmR: { name: 'lowerArmR', parent: 'elbowR', limit: lim([0, 0], [-80 * D2R, 80 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
