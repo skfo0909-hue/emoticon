@@ -46,6 +46,13 @@ export interface HistoryEntry {
   pose: PoseData
 }
 
+export interface SavedExpression {
+  id: string
+  name: string
+  expression: ExpressionState
+  createdAt: number
+}
+
 interface CharacterState {
   proportions: BodyProportions
   headRatioPreset: HeadRatioPreset | null
@@ -59,6 +66,7 @@ interface CharacterState {
   light: LightSettings
   expression: ExpressionState
   savedPoses: SavedPose[]
+  savedExpressions: SavedExpression[]
   past: HistoryEntry[]
   future: HistoryEntry[]
   isInteracting: boolean
@@ -84,6 +92,8 @@ interface CharacterState {
   redo: () => void
   addSavedPose: (pose: SavedPose) => void
   removeSavedPose: (id: string) => void
+  addSavedExpression: (expr: SavedExpression) => void
+  removeSavedExpression: (id: string) => void
   setIsInteracting: (value: boolean) => void
   setPelvisGizmoMode: (mode: 'translate' | 'rotate') => void
   mirrorLeftToRight: () => void
@@ -120,6 +130,7 @@ export const useCharacterStore = create<CharacterState>()(
   light: { azimuth: 45, elevation: 55, shadow: true },
   expression: defaultExpression(),
   savedPoses: [],
+  savedExpressions: [],
   past: [],
   future: [],
   isInteracting: false,
@@ -211,6 +222,9 @@ export const useCharacterStore = create<CharacterState>()(
 
   addSavedPose: (savedPose) => set((state) => ({ savedPoses: [...state.savedPoses, savedPose] })),
   removeSavedPose: (id) => set((state) => ({ savedPoses: state.savedPoses.filter((p) => p.id !== id) })),
+  addSavedExpression: (expr) => set((state) => ({ savedExpressions: [...state.savedExpressions, expr] })),
+  removeSavedExpression: (id) =>
+    set((state) => ({ savedExpressions: state.savedExpressions.filter((e) => e.id !== id) })),
   setIsInteracting: (value) => set({ isInteracting: value }),
   setPelvisGizmoMode: (mode) => set({ pelvisGizmoMode: mode }),
 
@@ -265,6 +279,7 @@ export const useCharacterStore = create<CharacterState>()(
         light: state.light,
         expression: state.expression,
         savedPoses: state.savedPoses,
+        savedExpressions: state.savedExpressions,
       }),
     },
   ),

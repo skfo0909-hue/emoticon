@@ -1,7 +1,7 @@
 // 포즈 썸네일을 오프스크린으로 렌더링해 PNG data URL로 반환한다.
 // 렌더러/씬은 재사용하는 싱글턴으로 유지해 매번 WebGL 컨텍스트를 새로 만들지 않는다.
 import { AmbientLight, DirectionalLight, PerspectiveCamera, Scene, WebGLRenderer } from 'three'
-import type { BodyProportions, PoseData } from '../types/character'
+import type { BodyProportions, ExpressionState, PoseData } from '../types/character'
 import { buildCharacterObject3D, disposeCharacterObject3D } from './buildCharacterObject3D'
 import { computeCharacterBounds, resolveMeasurements } from '../skeleton/jointDefs'
 
@@ -28,10 +28,11 @@ export function renderPoseThumbnail(
   proportions: BodyProportions,
   pose: PoseData,
   size = 128,
+  expression?: ExpressionState,
 ): string {
   const { renderer, scene, camera } = ensureSetup(size)
 
-  const character = buildCharacterObject3D(proportions, pose)
+  const character = buildCharacterObject3D(proportions, pose, 'toon', undefined, expression)
   scene.add(character)
 
   const measurements = resolveMeasurements(proportions)

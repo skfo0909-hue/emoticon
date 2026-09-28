@@ -11,7 +11,7 @@ function quatFromDeg([x, y, z]: EulerDeg): Quat {
   return [q.x, q.y, q.z, q.w]
 }
 
-function buildPose(
+export function buildPose(
   overrides: Partial<Record<JointName, EulerDeg>>,
   pelvis?: { rotation?: EulerDeg; position?: [number, number, number] },
 ): PoseData {

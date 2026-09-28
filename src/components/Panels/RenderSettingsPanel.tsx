@@ -27,6 +27,7 @@ export default function RenderSettingsPanel() {
   const toggleViewOption = useCharacterStore((s) => s.toggleViewOption)
   const proportions = useCharacterStore((s) => s.proportions)
   const pose = useCharacterStore((s) => s.pose)
+  const expression = useCharacterStore((s) => s.expression)
 
   const [transparent, setTransparent] = useState(true)
   const [preset, setPreset] = useState<CanvasPreset>(720)
@@ -43,6 +44,7 @@ export default function RenderSettingsPanel() {
         transparent,
         renderMode,
         light,
+        expression,
       })
       downloadDataURL(dataUrl, `character-${Date.now()}.png`)
     } finally {

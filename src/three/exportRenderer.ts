@@ -9,7 +9,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three'
-import type { BodyProportions, PoseData } from '../types/character'
+import type { BodyProportions, ExpressionState, PoseData } from '../types/character'
 import { buildCharacterObject3D, disposeCharacterObject3D } from './buildCharacterObject3D'
 import type { LightSettings, RenderMode } from '../store/useCharacterStore'
 
@@ -22,6 +22,7 @@ export interface ExportOptions {
   renderMode: RenderMode
   light: LightSettings
   backgroundColor?: string
+  expression?: ExpressionState
 }
 
 export function renderCharacterToDataURL(
@@ -29,7 +30,7 @@ export function renderCharacterToDataURL(
   pose: PoseData,
   options: ExportOptions,
 ): string {
-  const { width, height, transparent, renderMode, light, backgroundColor = '#f5eedf' } = options
+  const { width, height, transparent, renderMode, light, backgroundColor = '#f5eedf', expression } = options
 
   const renderer = new WebGLRenderer({ alpha: true, antialias: true, preserveDrawingBuffer: true })
   renderer.setSize(width, height, false)
@@ -49,7 +50,7 @@ export function renderCharacterToDataURL(
   dir.position.set(r * Math.sin(az) * Math.cos(el), r * Math.sin(el) + 1.5, r * Math.cos(az) * Math.cos(el))
   scene.add(dir)
 
-  const character = buildCharacterObject3D(proportions, pose, renderMode)
+  const character = buildCharacterObject3D(proportions, pose, renderMode, undefined, expression)
   scene.add(character)
 
   const box = new Box3().setFromObject(character)

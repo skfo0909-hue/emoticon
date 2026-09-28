@@ -5,6 +5,7 @@ import PoseControlToolbar from './components/Panels/PoseControlToolbar'
 import HeadRotationPanel from './components/Panels/HeadRotationPanel'
 import PosePanel from './components/Panels/PosePanel'
 import RenderSettingsPanel from './components/Panels/RenderSettingsPanel'
+import ExpressionPanel from './components/Panels/ExpressionPanel'
 import CanvasStage from './components/Scene/CanvasStage'
 import { useCharacterStore } from './store/useCharacterStore'
 
@@ -31,7 +32,7 @@ function App() {
         <span className="text-xs opacity-60">캐릭터 포즈 참고용 3D 구체관절 인형 도구</span>
       </header>
 
-      <div className="flex-1 min-h-0 grid grid-cols-[260px_1fr_280px] gap-3">
+      <div className="flex-1 min-h-0 grid grid-cols-[260px_1fr_300px_300px] gap-3">
         <aside className="min-h-0 overflow-y-auto flex flex-col gap-3">
           <BodyShapePanel />
           <RenderSettingsPanel />
@@ -50,6 +51,10 @@ function App() {
         <aside className="min-h-0 overflow-y-auto flex flex-col gap-3">
           <HeadRotationPanel />
           <PosePanel />
+        </aside>
+
+        <aside className="min-h-0 overflow-y-auto flex flex-col gap-3">
+          <ExpressionPanel />
         </aside>
       </div>
     </div>

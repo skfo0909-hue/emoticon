@@ -3,7 +3,7 @@ import { useCharacterStore } from '../../store/useCharacterStore'
 import { PRESET_POSES } from '../../data/presetPoses'
 import { renderPoseThumbnail } from '../../three/thumbnailRenderer'
 import { transitionToPose } from '../../pose/poseTransition'
-import type { PoseData, SavedPose } from '../../types/character'
+import type { ExpressionState, PoseData, SavedPose } from '../../types/character'
 
 function download(filename: string, content: string, mime: string) {
   const blob = new Blob([content], { type: mime })
@@ -46,14 +46,15 @@ export default function PosePanel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(proportions)])
 
-  const applyPose = (target: PoseData) => {
+  const applyPose = (target: PoseData, expr?: ExpressionState) => {
     commitHistory(pose)
     transitionToPose(target)
+    if (expr) setExpression(expr)
   }
 
   const handleSave = () => {
     const name = saveName.trim() || `내 포즈 ${savedPoses.length + 1}`
-    const thumbnail = renderPoseThumbnail(proportions, pose, 110)
+    const thumbnail = renderPoseThumbnail(proportions, pose, 110, expression)
     const saved: SavedPose = {
       id: `saved-${Date.now()}`,
       name,
@@ -130,7 +131,7 @@ export default function PosePanel() {
               className="relative flex flex-col items-center gap-1 rounded-xl border p-1"
               style={{ borderColor: 'var(--card-border)' }}
             >
-              <button className="w-full" onClick={() => applyPose(sp.pose)} title={sp.name}>
+              <button className="w-full" onClick={() => applyPose(sp.pose, sp.expression)} title={sp.name}>
                 {sp.thumbnail && (
                   <img src={sp.thumbnail} alt={sp.name} className="w-full aspect-square rounded-lg bg-[var(--cream)]" />
                 )}
