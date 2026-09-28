@@ -59,13 +59,13 @@ export const JOINT_DEFS: Record<JointName, JointDef> = {
 
   hipL: { name: 'hipL', parent: 'pelvis', limit: lim([-100 * D2R, 120 * D2R], [-45 * D2R, 45 * D2R], [-70 * D2R, 70 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
   thighL: { name: 'thighL', parent: 'hipL', limit: lim([0, 0], [-45 * D2R, 45 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
-  kneeL: { name: 'kneeL', parent: 'thighL', limit: lim([-150 * D2R, 0], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
+  kneeL: { name: 'kneeL', parent: 'thighL', limit: lim([0, 150 * D2R], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
   shinL: { name: 'shinL', parent: 'kneeL', limit: lim([0, 0], [-30 * D2R, 30 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
   footL: { name: 'footL', parent: 'shinL', limit: lim([-40 * D2R, 40 * D2R], [-30 * D2R, 30 * D2R], [-30 * D2R, 30 * D2R]), isHandle: true, handleColor: 0xff8a3d },
 
   hipR: { name: 'hipR', parent: 'pelvis', limit: lim([-100 * D2R, 120 * D2R], [-45 * D2R, 45 * D2R], [-70 * D2R, 70 * D2R]), isHandle: true, handleColor: 0x2e7d32 },
   thighR: { name: 'thighR', parent: 'hipR', limit: lim([0, 0], [-45 * D2R, 45 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
-  kneeR: { name: 'kneeR', parent: 'thighR', limit: lim([-150 * D2R, 0], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
+  kneeR: { name: 'kneeR', parent: 'thighR', limit: lim([0, 150 * D2R], [0, 0], [0, 0]), isHandle: true, handleColor: 0x2e7d32 },
   shinR: { name: 'shinR', parent: 'kneeR', limit: lim([0, 0], [-30 * D2R, 30 * D2R], [0, 0]), isHandle: false, handleColor: 0x2e7d32 },
   footR: { name: 'footR', parent: 'shinR', limit: lim([-40 * D2R, 40 * D2R], [-30 * D2R, 30 * D2R], [-30 * D2R, 30 * D2R]), isHandle: true, handleColor: 0xff8a3d },
 }

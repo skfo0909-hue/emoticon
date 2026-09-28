@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import {
   ALL_JOINT_NAMES,
   DEFAULT_PROPORTIONS,
@@ -99,7 +100,9 @@ function clonePose(pose: PoseData): PoseData {
   } as PoseData
 }
 
-export const useCharacterStore = create<CharacterState>((set, get) => ({
+export const useCharacterStore = create<CharacterState>()(
+  persist(
+    (set, get) => ({
   proportions: { ...DEFAULT_PROPORTIONS },
   headRatioPreset: 2.5,
   pose: createDefaultPose(),
@@ -248,7 +251,24 @@ export const useCharacterStore = create<CharacterState>((set, get) => ({
       future: [],
     })
   },
-}))
+    }),
+    {
+      name: 'emoticon-doll-storage',
+      partialize: (state) => ({
+        proportions: state.proportions,
+        headRatioPreset: state.headRatioPreset,
+        pose: state.pose,
+        cameraView: state.cameraView,
+        fov: state.fov,
+        viewToggles: state.viewToggles,
+        renderMode: state.renderMode,
+        light: state.light,
+        expression: state.expression,
+        savedPoses: state.savedPoses,
+      }),
+    },
+  ),
+)
 
 export function allJointNames(): JointName[] {
   return ALL_JOINT_NAMES
