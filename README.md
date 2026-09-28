@@ -1,32 +1,58 @@
-# React + TypeScript + Vite
+# 이모티콘 포즈용 디지털 구체관절 인형
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+캐릭터 이모티콘을 그릴 때 참고할 포즈를 만드는 웹 도구. 귀여운 2~4등신 캐릭터를
+3D로 표시하고, 체형을 조절하고 관절을 움직여 포즈를 잡은 뒤 표정과 만화 기호를
+더해 PNG로 내보낼 수 있다.
 
-Currently, two official plugins are available:
+## 기술 스택
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Vite + React + TypeScript
+- Three.js (`@react-three/fiber`, `@react-three/drei`)
+- 상태관리: Zustand (`persist` 미들웨어로 localStorage 자동 저장)
+- 스타일: Tailwind CSS
+- 캐릭터는 외부 3D 모델 없이 구/캡슐 기본 도형으로 절차적으로 생성
 
-## React Compiler
+## 실행
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev      # 개발 서버
+npm run build    # 프로덕션 빌드
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 주요 기능
+
+- **체형**: 등신 프리셋(2/2.5/3/4등신) + 머리·팔·다리·몸통·통통함·손발 크기 슬라이더
+- **포즈 조작**: 관절 클릭 → FK 회전(가동범위 제한 포함) / IK 모드로 손·발 드래그 /
+  골반 이동·회전 / 머리 단독 회전 / 좌우 대칭 복사·반전 / 실행취소·다시실행
+- **카메라**: 시점 버튼(정면/3·4좌/3·4우/측면/뒷면/위/아래), OrbitControls,
+  원근감(FOV) 슬라이더 — 태블릿 터치(회전/핀치줌)도 지원
+- **포즈 라이브러리**: 기본 포즈 10종, 현재 포즈 저장, JSON 내보내기/불러오기,
+  포즈 전환 시 부드러운 보간
+- **렌더**: 툰 셰이딩(베이지+검은 외곽선) / 외곽선만 / 실루엣, 조명 방향·그림자,
+  바닥 그리드·관절 핸들 등 표시 토글, PNG 내보내기(투명 배경, 360/720/1080/자유 크기)
+- **표정**: 눈 9종·눈썹·입 8종·볼터치를 CanvasTexture로 머리에 매핑, 만화 기호
+  13종(빌보드 스프라이트), 로컬 감정 사전 20종(동의어 인식) + 강도 슬라이더 +
+  감정별 추천 포즈, "내 표정" 저장
+- **반응형**: lg(태블릿 가로) 이상은 3단 레이아웃, 좁은 화면은 좌우 패널이
+  슬라이드 드로어로 전환
+
+## 코드 구조
+
+```
+src/
+  skeleton/     뼈대 계층 정의, 체형 배율→치수 변환, 회전 clamp, 좌우 미러링
+  ik/           2본 해석적 IK 솔버
+  pose/         포즈 보간 전환
+  expression/   표정/기호 캔버스 드로잉, 표정 보간
+  data/         포즈 프리셋, 감정 사전
+  three/        R3F 없이 순수 three.js로 캐릭터를 생성하는 오프스크린 렌더러
+                (포즈 썸네일, PNG 내보내기용)
+  store/        zustand 전역 상태 (체형/포즈/표정/카메라/렌더 설정)
+  components/
+    Scene/      R3F 캐릭터 리그, 카메라, 조명, 관절 핸들·기즈모
+    Face/       얼굴/기호 레이어
+    Panels/     좌/중앙/우 UI 패널
+```
+
+포즈 데이터는 관절 이름 → 쿼터니언 형태로 저장해 체형과 독립적으로 유지한다.
