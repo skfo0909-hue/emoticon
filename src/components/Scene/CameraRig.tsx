@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { Box3, Vector3, PerspectiveCamera as ThreePerspectiveCamera } from 'three'
+import { Box3, TOUCH, Vector3, PerspectiveCamera as ThreePerspectiveCamera } from 'three'
 import { useCharacterStore, type CameraViewName } from '../../store/useCharacterStore'
 import { computeCharacterBounds, resolveMeasurements } from '../../skeleton/jointDefs'
 import { getJointObject } from '../../skeleton/jointObjectRegistry'
@@ -147,6 +147,8 @@ export default function CameraRig() {
       enablePan={false}
       minDistance={approxDistance * 0.3}
       maxDistance={approxDistance * 3}
+      // 아이패드 등 터치 기기: 한 손가락 드래그는 회전, 두 손가락은 핀치 줌 + 회전
+      touches={{ ONE: TOUCH.ROTATE, TWO: TOUCH.DOLLY_ROTATE }}
       onStart={() => {
         animatingRef.current = false
       }}
